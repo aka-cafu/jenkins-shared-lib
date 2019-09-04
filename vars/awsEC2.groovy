@@ -20,12 +20,12 @@ def call() {
   if (params.ENVIRONMENT == 'PROD' ) {
    stage('Init') {
     dir(values.ec2Module) {
-       sh "terraform init -backend-config='${values.s3Bucket}' -backend-config='key=application/${params.NOME}-${params.TAG}/terraform.tfstate' -backend-config='${values.awsRegion}'"
+       sh "terraform init -backend-config='${values.s3Bucket}' -backend-config='key=application/${params.NAME}-${params.TAG}/terraform.tfstate' -backend-config='${values.awsRegion}'"
    }
   } 
   } else {
     dir(values.ec2Module) {
-       sh "terraform init -backend-config='${values.s3BucketDevHom}' -backend-config='key=application/${params.NOME}-${params.TAG}/terraform.tfstate' -backend-config='${values.awsRegionDevHom}'"
+       sh "terraform init -backend-config='${values.s3BucketDevHom}' -backend-config='key=application/${params.NAME}-${params.TAG}/terraform.tfstate' -backend-config='${values.awsRegionDevHom}'"
     }      
    }  
   stage('Plan') {
