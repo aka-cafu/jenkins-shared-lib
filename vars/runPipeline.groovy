@@ -7,9 +7,13 @@ def call() {
 
     if (p.buildImage == true) {
         stage('Build') {
-         docker.build(p.imageName:p.imageTag)
+         docker.build(p.imageName)
           sh 'docker images'
-       }       
+        }       
   }
+        stage('Deploy') {
+	p.deployCmd()
+	  sh 'docker ps && sleep 60'
+        }
  }
 }
