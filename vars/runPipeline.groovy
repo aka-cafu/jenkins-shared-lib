@@ -10,3 +10,6 @@ def call() {
          docker.build(p.imageName)
           sh 'docker images'
        }       
+  }
+ }
+}
