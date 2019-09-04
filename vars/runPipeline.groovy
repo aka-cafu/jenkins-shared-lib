@@ -12,7 +12,7 @@ def call() {
         }       
   }
         stage('Deploy') {
-	p.deployCmd
+	sh p.deployCmd
 	  sh 'docker ps && sleep 60'
         }
  }
