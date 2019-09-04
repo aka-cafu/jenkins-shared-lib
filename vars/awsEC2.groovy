@@ -32,13 +32,13 @@ def call() {
    stage('Init') {
     dir(values.ec2Module) {
        sh "terraform init -backend-config='${values.s3Bucket} -backend-config='${values.s3BucketKey}' -backend-config='${values.awsRegion}'"
-    }
+   }
+  } 
   } else {
     dir(values.ec2Module) {
        sh "terraform init -backend-config='${values.s3BucketDevHom} -backend-config='${values.s3BucketKey}' -backend-config='${values.awsRegionDevHom}'"
     }      
    }  
-  }
   stage('Plan') {
       dir(values.ec2Module) {
     env.TF_VAR_environment = "${params.ENVIRONMENT}"
