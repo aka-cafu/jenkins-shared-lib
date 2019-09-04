@@ -20,7 +20,7 @@ def call() {
    checkout scm
   }
   def values = terraformAwsEc2()
-  if (values.terraformVersion < 0.10 ) {
+  if (values.terraformVersion <= 0.11 ) {
    stage('Version') {
     dir(values.ec2Module) {
        echo "Version unsupported!"
