@@ -1,10 +1,5 @@
 def call() {
  node {
-     environment {
-        REGION = "sa-east-1"
-        OWNER = "Prevent"
-        TAG_GROUP = 'App'
-     }
   stage('Checkout') {
    checkout scm
   }
