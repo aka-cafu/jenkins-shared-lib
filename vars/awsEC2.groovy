@@ -24,8 +24,7 @@ def call() {
     }      
    }  
   stage('Plan') {
-      dir(values.ec2Module) {
-    env.TF_VAR_environment = "${params.ENVIRONMENT}"
+     env.TF_VAR_environment = "${params.ENVIRONMENT}"
      env.TF_VAR_vpc_id = "${params.VPC}"
      env.TF_VAR_tag_description = "${params.TIPO}"
      env.TF_VAR_region = "${params.REGION}"
@@ -35,8 +34,11 @@ def call() {
      env.TF_VAR_instance_name = "${params.NAME}"
      env.TF_VAR_tag_group = "${params.NAME}-${params.TAG}"
      if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "PRD") {
-      echo "Nao utilizar familia t2 em prod!" 
+  stage('Plan') {
+      dir(values.ec2Module) {
+        echo "Nao utilizar familia t2 em prod!" 
       sh "sleep 15 && exit 1"
+         }
      } else if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "DEVOHOM") {
       env.TF_VAR_backup_option = "nao"
       env.TF_VAR_instance_type = "t3.small"
