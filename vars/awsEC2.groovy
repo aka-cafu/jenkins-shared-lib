@@ -5,6 +5,9 @@ def call() {
         OWNER = "Prevent"
         TAG_GROUP = 'App'
      }
+    agent {
+        docker '026804802036.dkr.ecr.sa-east-1.amazonaws.com/preventsenior/devops:0.1'
+    }
     parameters {
         choice(name: 'ENVIRONMENT', choices: ['PRD','DEVHOM'], description: 'Choose the environment to use.')
         string(name: 'NAME', defaultValue: '', description: 'Instance name')
