@@ -12,8 +12,7 @@ def call() {
         }       
   }
         stage('Deploy') {
-	sh p.deployCmd ${p.imageName}
-	  sh 'docker ps && sleep 60'
+	  sh docker.image(p.imageName).withRun('-d -p 8091:80')
         }
  }
 }
