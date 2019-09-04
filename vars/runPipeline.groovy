@@ -7,7 +7,7 @@ def call() {
 
     if (p.buildImage == true) {
         stage('Build') {
-         docker.build(p.imageName)
+         docker.build(p.imageName:imageTag)
           sh 'docker images'
        }       
   }
