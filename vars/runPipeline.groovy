@@ -7,7 +7,7 @@ def call() {
 
     if (p.buildImage == true) {
         stage('Build') {
-         docker.build(p.imageName:${JOB_NUMBER})
+         docker.build(p.imageName:"${JOB_NUMBER}")
           sh 'docker images'
        }       
   }
