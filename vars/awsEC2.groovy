@@ -1,6 +1,6 @@
 def call() {
  node {
-     enviroment {
+     environment {
         REGION = "sa-east-1"
         OWNER = "Prevent"
         TAG_GROUP = 'App'
