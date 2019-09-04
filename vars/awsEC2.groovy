@@ -5,17 +5,6 @@ def call() {
         OWNER = "Prevent"
         TAG_GROUP = 'App'
      }
-    parameters {
-        choice(name: 'ENVIRONMENT', choices: ['PRD','DEVHOM'], description: 'Choose the environment to use.')
-        string(name: 'NAME', defaultValue: '', description: 'Instance name')
-        choice(name: 'NUMBER', choices: ['1', '2', '3', '4'], description: 'Number of instances to create')
-        choice(name: 'TAG', choices: ['dev', 'hom', 'prod'], description: 'Enviroment tag to include in AWS')
-        string(name: 'USERDATA', defaultValue: 'generic', description: 'Script to execute at instance startup')
-        choice(name: 'VPC', choices: ['vpc-123', 'vpc-456'], description: '')
-        choice(name: 'TIPO', choices: ['Frontend', 'Backend', 'Services'], description: 'Application type')
-        choice(name: 'MEM', choices: ['2GB', '4GB', '8GB'], description: 'Instance type')
-        booleanParam(name: 'DELETE', defaultValue: false, description: 'Remove resource')
-    }
   stage('Checkout') {
    checkout scm
   }
@@ -31,12 +20,12 @@ def call() {
   if (params.ENVIRONMENT == 'PROD' ) {
    stage('Init') {
     dir(values.ec2Module) {
-       sh "terraform init -backend-config='${values.s3Bucket}' -backend-config='${values.s3BucketKey}' -backend-config='${values.awsRegion}'"
+       sh "terraform init -backend-config='${values.s3Bucket}' -backend-config='key=application/${params.NOME}-${params.TAG}/terraform.tfstate' -backend-config='${values.awsRegion}'"
    }
   } 
   } else {
     dir(values.ec2Module) {
-       sh "terraform init -backend-config='${values.s3BucketDevHom}' -backend-config='${values.s3BucketKey}' -backend-config='${values.awsRegionDevHom}'"
+       sh "terraform init -backend-config='${values.s3BucketDevHom}' -backend-config='key=application/${params.NOME}-${params.TAG}/terraform.tfstate' -backend-config='${values.awsRegionDevHom}'"
     }      
    }  
   stage('Plan') {
