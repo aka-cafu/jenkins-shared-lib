@@ -12,7 +12,7 @@ def call() {
         }       
   }
         stage('Deploy') {
-	  sh docker.image(p.imageName).withRun('-d')
+	  sh p.deployCmd
         }
  }
 }
