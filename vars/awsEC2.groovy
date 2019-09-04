@@ -33,6 +33,7 @@ def call() {
      env.TF_VAR_instance_environment = "${params.TAG}"
      env.TF_VAR_instance_name = "${params.NAME}"
      env.TF_VAR_tag_group = "${params.NAME}-${params.TAG}"
+  }
      if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "PRD") {
   stage('Plan') {
       dir(values.ec2Module) {
