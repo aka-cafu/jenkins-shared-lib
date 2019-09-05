@@ -40,7 +40,7 @@ def call() {
         echo "Nao utilizar familia t2 em prod!" 
       sh "sleep 15 && exit 1"
          }
-       }} else if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "DEVOHOM") {
+       } else if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "DEVOHOM") {
             dir(values.ec2Module) {
       env.TF_VAR_backup_option = "nao"
       env.TF_VAR_instance_type = "t3.small"
@@ -72,6 +72,7 @@ def call() {
       env.TF_VAR_tag_group = "${params.TAG_GROUP}"
       env.TF_VAR_alarm_name = "${params.NAME}-${params.TAG}-down-recovering"  
       sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -target='module.ec2.aws_cloudwatch_metric_alarm.ec2_autorecover' -out=${params.NAME}-${params.TAG}.tfplan" }
+      }
       }
    }
   }
