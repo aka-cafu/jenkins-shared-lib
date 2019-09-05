@@ -34,8 +34,9 @@ def call() {
      env.TF_VAR_instance_name = "${params.NAME}"
      env.TF_VAR_tag_group = "${params.NAME}-${params.TAG}"
   }
+
+    stage('Plan') {
      if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "PRD") {
-  stage('Plan') {
       dir(values.ec2Module) {
         echo "Nao utilizar familia t2 em prod!" 
       sh "sleep 15 && exit 1"
@@ -73,7 +74,7 @@ def call() {
       env.TF_VAR_alarm_name = "${params.NAME}-${params.TAG}-down-recovering"  
       sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -target='module.ec2.aws_cloudwatch_metric_alarm.ec2_autorecover' -out=${params.NAME}-${params.TAG}.tfplan" }
       }
-      }
+    }
    }
   }
 
