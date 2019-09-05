@@ -77,7 +77,7 @@ def call() {
     //  } else {
     //   echo "Acao cancelada!"
     //  }
-    echo tfapprove
+    sh "ls"
     }
    }
   }
