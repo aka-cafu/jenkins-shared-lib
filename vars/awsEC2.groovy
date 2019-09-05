@@ -70,7 +70,7 @@ def call() {
    stage('Destroy') {
     dir(values.ec2Module) {
     if ("${params.DELETE}" == true) {
-     def tfapprove = input message: 'Tem certeza, que deseja remover estes recursos?',
+     env.TF_APPROVE = input message: 'Tem certeza, que deseja remover estes recursos?',
      parameters: [choice(name: 'Destroy', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
     //  if (approve == 'sim') {
     //   sh values.terraformDestroy
