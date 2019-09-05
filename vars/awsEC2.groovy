@@ -68,8 +68,7 @@ def call() {
    }
   }
   stage('Destroy') {
-   when { expression { return params.DELETE }
-   }
+   if ("${params.DELETE}" == true ) {
      dir("applications/ec2") {
      def approve = input message: 'Tem certeza, que deseja remover estes recursos?',
       parameters: [choice(name: 'Destroy', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
@@ -77,6 +76,7 @@ def call() {
       sh "terraform destroy -auto-approve"
      } else {
       echo "Acao cancelada!"
+      }
       }
      }
     }
