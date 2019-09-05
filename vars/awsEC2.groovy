@@ -38,11 +38,11 @@ def call() {
      echo "Nao utilizar familia t2 em prod!"
      sh "sleep 15 && exit 1"
     } else if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "DEVOHOM") {
-     env.TF_VAR_backup_option = "nao"
-     env.TF_VAR_instance_type = "t3.small"
-     env.TF_VAR_tag_group = "${params.TAG_GROUP}-${params.TAG}"
+    //  env.TF_VAR_backup_option = "nao"
+    //  env.TF_VAR_instance_type = "t3.small"
+    //  env.TF_VAR_tag_group = "${params.TAG_GROUP}-${params.TAG}"
      sh "ls"
-     sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -out=${params.NAME}-${params.TAG}.tfplan"
+    //  sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -out=${params.NAME}-${params.TAG}.tfplan"
     } else if ("${params.MEM}" == "4GB" && "${params.ENVIRONMENT}" == "DEVOHOM") {
      env.TF_VAR_backup_option = "nao"
      env.TF_VAR_instance_type = "c5.large"
