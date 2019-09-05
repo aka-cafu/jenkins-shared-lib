@@ -68,7 +68,7 @@ def call() {
    }
   }
    stage('Destroy') {
-    if ("${params.DELETE}" == true) {
+    if (!"${params.DELETE}") {
     dir("applications/ec2") {
      def approve = input message: 'Tem certeza, que deseja remover estes recursos?',
       parameters: [choice(name: 'Destroy', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
@@ -81,4 +81,4 @@ def call() {
    }
   }
  }
-}
+} 
