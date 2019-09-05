@@ -45,6 +45,7 @@ def call() {
       env.TF_VAR_backup_option = "nao"
       env.TF_VAR_instance_type = "t3.small"
       env.TF_VAR_tag_group = "${params.TAG_GROUP}-${params.TAG}"
+      sh "ls"
       sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -out=${params.NAME}-${params.TAG}.tfplan" 
     } else if ("${params.MEM}" == "4GB" && "${params.ENVIRONMENT}" == "DEVOHOM") {
       env.TF_VAR_backup_option = "nao"
