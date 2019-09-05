@@ -63,7 +63,7 @@ def call() {
         env.TF_VAR_instance_type = "m5.large"
         env.TF_VAR_tag_group = "${params.TAG_GROUP}-${params.TAG}"
         sh "terraform plan -out=${params.NAME}-${params.TAG}.tfplan"
-    } else if ("${params.MEM}" == "8GB"  && "${params.AMBIENTE}" == "PRD") {
+    } else ("${params.MEM}" == "8GB"  && "${params.AMBIENTE}" == "PRD") {
         env.TF_VAR_backup_option = "sim" 
         env.TF_VAR_instance_type = "m5.large"
         env.TF_VAR_tag_group = "${params.TAG_GROUP}"
