@@ -72,7 +72,7 @@ def call() {
     if (params.DELETE) {
      def terraformApprove = input message: 'Tem certeza, que deseja remover estes recursos?',
      parameters: [choice(name: 'Destroy', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
-     if (approve == 'sim') {
+     if (terraformApprove == 'sim') {
       echo "terraform destroy"
       //sh values.terraformDestroy
      } else {
