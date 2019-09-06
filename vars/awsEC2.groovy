@@ -67,14 +67,26 @@ def call() {
     }
    }
   }
-   stage('Destroy') {
-    dir(values.ec2Module) {
+  stage('Destroy') {
+   dir(values.ec2Module) {
     if (params.DELETE) {
      def terraformApprove = input message: 'Tem certeza, que deseja remover estes recursos?',
-     parameters: [choice(name: 'Destroy', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
+      parameters: [choice(name: 'Destroy', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
      if (terraformApprove == 'sim') {
-      echo "terraform destroy"
-      //sh values.terraformDestroy
+      sh values.terraformDestroy
+     } else {
+      echo "Acao cancelada!"
+     }
+    }
+   }
+  }
+  stage('Apply') {
+   dir(values.ec2Module) {
+    if (!params.DELETE) {
+     def terraformApprove = input message: 'Tem certeza, que deseja criar estes recursos?',
+      parameters: [choice(name: 'Apply', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
+     if (terraformApprove == "sim") {
+      sh "terraform apply ${params.NOME}-${params.TAG}.tfplan"
      } else {
       echo "Acao cancelada!"
      }
@@ -82,4 +94,4 @@ def call() {
    }
   }
  }
-} 
+}
