@@ -81,6 +81,7 @@ def call() {
    }
   }
   stage('Apply') {
+      slack()
    dir(values.ec2Module) {
     if (!params.DELETE) {
      def terraformApprove = input message: 'Tem certeza, que deseja criar estes recursos?',
