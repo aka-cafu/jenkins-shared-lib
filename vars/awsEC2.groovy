@@ -87,7 +87,7 @@ def call() {
      def terraformApprove = input message: 'Do you really want to create the resources described above?',
       parameters: [choice(name: 'Apply', choices: 'yes\nno', description: 'Enter a value')]
      if (terraformApprove == "yes") {
-      sh "terraform apply ${params.NOME}-${params.TAG}.tfplan"
+      sh "terraform apply ${params.NAME}-${params.TAG}.tfplan"
      } else {
       echo "Apply canclled."
      }
