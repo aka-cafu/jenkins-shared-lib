@@ -70,12 +70,12 @@ def call() {
   stage('Destroy') {
    dir(values.ec2Module) {
     if (params.DELETE) {
-     def terraformApprove = input message: 'Tem certeza, que deseja remover estes recursos?',
-      parameters: [choice(name: 'Destroy', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
-     if (terraformApprove == 'sim') {
+     def terraformApprove = input message: 'Do you really want to destroy all resources?',
+      parameters: [choice(name: 'Destroy', choices: 'no\nyes', description: 'Enter a value')]
+     if (terraformApprove == 'yes') {
       sh values.terraformDestroy
      } else {
-      echo "Acao cancelada!"
+      echo "Apply canclled."
      }
     }
    }
@@ -84,13 +84,13 @@ def call() {
       slack()
    dir(values.ec2Module) {
     if (!params.DELETE) {
-     def terraformApprove = input message: 'Tem certeza, que deseja criar estes recursos?',
-      parameters: [choice(name: 'Apply', choices: 'sim\nnao', description: 'Escolha "sim" para aplicar as mudancas')]
-     if (terraformApprove == "sim") {
+     def terraformApprove = input message: 'Do you really want to create the resources described above?',
+      parameters: [choice(name: 'Apply', choices: 'yes\nno', description: 'Enter a value')]
+     if (terraformApprove == "yes") {
       //sh "terraform apply ${params.NOME}-${params.TAG}.tfplan"
       echo "terraform apply"
      } else {
-      echo "Acao cancelada!"
+      echo "Apply canclled."
      }
     }
    }
