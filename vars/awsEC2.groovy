@@ -75,7 +75,7 @@ def call() {
      if (terraformApprove == 'yes') {
       sh values.terraformDestroy
      } else {
-      echo "Apply canclled."
+      echo "Apply cancelled."
      }
     }
    }
@@ -89,7 +89,7 @@ def call() {
      if (terraformApprove == "yes") {
       sh "terraform apply ${params.NAME}-${params.TAG}.tfplan"
      } else {
-      echo "Apply canclled."
+      echo "Apply cancelled."
      }
     }
    }
