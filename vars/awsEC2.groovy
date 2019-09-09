@@ -35,7 +35,7 @@ def call() {
     env.TF_VAR_instance_name = "${params.NAME}"
     env.TF_VAR_tag_group = "${params.NAME}-${params.TAG}"
     if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "PRD") {
-     echo "Nao utilizar familia t2 em prod!"
+     echo "Don't use t2 family at production environment!"
      sh "sleep 15 && exit 1"
     } else if ("${params.MEM}" == "2GB" && "${params.ENVIRONMENT}" == "DEVOHOM") {
      env.TF_VAR_backup_option = "nao"
