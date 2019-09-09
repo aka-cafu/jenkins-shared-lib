@@ -1,19 +1,24 @@
 def call() {
  node {
   stage('Checkout') {
+    steps {
    checkout scm
+  }
   }
   def values = terraformAwsEc2()
   if (values.terraformVersion <= 0.10) {
    stage('Version') {
+    steps {
     dir(values.ec2Module) {
      echo "Version unsupported!"
      sh values.versionUnsupported
+    }
     }
    }
   }
   if (params.ENVIRONMENT == 'PROD') {
    stage('Init') {
+    steps {
     dir(values.ec2Module) {
      sh "terraform init -backend-config='${values.s3Bucket}' -backend-config='key=application/${params.NAME}-${params.TAG}/terraform.tfstate' -backend-config='region=${values.awsRegion}' && sed -i 's/appname/${params.USERDATA}/g' main.tf"
     }
@@ -22,8 +27,10 @@ def call() {
    dir(values.ec2Module) {
     sh "terraform init -backend-config='bucket=${values.s3BucketDevHom}' -backend-config='key=application/${params.NAME}-${params.TAG}/terraform.tfstate' -backend-config='region=${values.awsRegionDevHom}' && sed -i 's/appname/${params.USERDATA}/g' main.tf"
    }
+   }
   }
   stage('Plan') {
+    steps {
    dir(values.ec2Module) {
     env.TF_VAR_environment = "${params.ENVIRONMENT}"
     env.TF_VAR_vpc_id = "${params.VPC}"
@@ -65,9 +72,11 @@ def call() {
      env.TF_VAR_alarm_name = "${params.NAME}-${params.TAG}-down-recovering"
      sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -target='module.ec2.aws_cloudwatch_metric_alarm.ec2_autorecover' -out=${params.NAME}-${params.TAG}.tfplan"
     }
+    }
    }
   }
   stage('Destroy') {
+    steps {
    dir(values.ec2Module) {
     if (params.DELETE) {
      def terraformApprove = input message: 'Do you really want to destroy all resources?',
@@ -79,9 +88,10 @@ def call() {
      }
     }
    }
+   }
   }
   stage('Apply') {
-      slack()
+    steps {
    dir(values.ec2Module) {
     if (!params.DELETE) {
      def terraformApprove = input message: 'Do you really want to create the resources described above?',
@@ -90,6 +100,7 @@ def call() {
       sh "terraform apply ${params.NAME}-${params.TAG}.tfplan"
      } else {
       echo "Apply cancelled."
+     }
      }
     }
    }
