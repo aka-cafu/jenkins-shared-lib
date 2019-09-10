@@ -7,10 +7,14 @@ def call() {
      checkout scm
     }
    }
-   script {
-   def values = terraformAwsEc2()
-   if (values.terraformVersion <= 0.10) {
-    stage('Version') {
+   stage('Call') {
+    script {
+     def values = terraformAwsEc2()
+    }
+   }
+   stage('Version') {
+    if (values.terraformVersion <= 0.10) {
+
      steps {
       dir(values.ec2Module) {
        echo "Version unsupported!"
@@ -19,10 +23,10 @@ def call() {
      }
     }
    }
-   }
+  }
+  stage('Init') {
    script {
-   if (params.ENVIRONMENT == 'PROD') {
-    stage('Init') {
+    if (params.ENVIRONMENT == 'PROD') {
      steps {
       dir(values.ec2Module) {
        sh "terraform init -backend-config='${values.s3Bucket}' -backend-config='key=application/${params.NAME}-${params.TAG}/terraform.tfstate' -backend-config='region=${values.awsRegion}' && sed -i 's/appname/${params.USERDATA}/g' main.tf"
@@ -35,11 +39,11 @@ def call() {
 
     }
    }
-   }
-   stage('Plan') {
-    steps {
-     dir(values.ec2Module) {
-         script {
+  }
+  stage('Plan') {
+   steps {
+    dir(values.ec2Module) {
+     script {
       env.TF_VAR_environment = "${params.ENVIRONMENT}"
       env.TF_VAR_vpc_id = "${params.VPC}"
       env.TF_VAR_tag_description = "${params.TIPO}"
@@ -81,23 +85,23 @@ def call() {
        sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -target='module.ec2.aws_cloudwatch_metric_alarm.ec2_autorecover' -out=${params.NAME}-${params.TAG}.tfplan"
       }
      }
-     }
     }
    }
-   stage('Destroy') {
-    steps {
-     dir(values.ec2Module) {
-      terraformDestroy()
-     }
+  }
+  stage('Destroy') {
+   steps {
+    dir(values.ec2Module) {
+     terraformDestroy()
     }
    }
-   stage('Apply') {
-    steps {
-     dir(values.ec2Module) {
-      terraformApply()
-     }
+  }
+  stage('Apply') {
+   steps {
+    dir(values.ec2Module) {
+     terraformApply()
     }
    }
   }
  }
+}
 }
