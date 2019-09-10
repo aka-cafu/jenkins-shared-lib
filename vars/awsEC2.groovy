@@ -70,18 +70,14 @@ def call() {
    }
   }
   stage('Destroy') {
-    steps {
    dir(values.ec2Module) {
       terraformDestroy()
    }
-  }
  }
   stage('Apply') {
-    steps {
    dir(values.ec2Module) {
       terraformApply()
     }
-   }
   }
  }
 }
