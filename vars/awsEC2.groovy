@@ -71,28 +71,12 @@ def call() {
   }
   stage('Destroy') {
    dir(values.ec2Module) {
-    if (params.DELETE) {
-     def terraformApprove = input message: 'Do you really want to destroy all resources?',
-      parameters: [choice(name: 'Destroy', choices: 'no\nyes', description: 'Enter a value')]
-     if (terraformApprove == 'yes') {
-      sh values.terraformDestroy
-     } else {
-      echo "Apply cancelled."
-     }
-    }
+      terraformDestroy()
    }
   }
   stage('Apply') {
    dir(values.ec2Module) {
-    if (!params.DELETE) {
-     def terraformApprove = input message: 'Do you really want to create the resources described above?',
-      parameters: [choice(name: 'Apply', choices: 'yes\nno', description: 'Enter a value')]
-     if (terraformApprove == "yes") {
-      sh "terraform apply ${params.NAME}-${params.TAG}.tfplan"
-     } else {
-      echo "Apply cancelled."
-     }
-    }
+      terraformApply()
    }
   }
  }
