@@ -6,12 +6,10 @@ def call() {
   def values = terraformAwsEc2()
   if (values.terraformVersion <= 0.10) {
    stage('Version') {
-    steps {
      dir(values.ec2Module) {
       echo "Version unsupported!"
       sh values.versionUnsupported
      }
-    }
    }
   }
   if (params.ENVIRONMENT == 'PROD') {
