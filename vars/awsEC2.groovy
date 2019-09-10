@@ -7,6 +7,7 @@ def call() {
      checkout scm
     }
    }
+   script {
    def values = terraformAwsEc2()
    if (values.terraformVersion <= 0.10) {
     stage('Version') {
@@ -18,6 +19,8 @@ def call() {
      }
     }
    }
+   }
+   script {
    if (params.ENVIRONMENT == 'PROD') {
     stage('Init') {
      steps {
@@ -31,6 +34,7 @@ def call() {
      sh "terraform init -backend-config='bucket=${values.s3BucketDevHom}' -backend-config='key=application/${params.NAME}-${params.TAG}/terraform.tfstate' -backend-config='region=${values.awsRegionDevHom}' && sed -i 's/appname/${params.USERDATA}/g' main.tf"
 
     }
+   }
    }
    stage('Plan') {
     steps {
