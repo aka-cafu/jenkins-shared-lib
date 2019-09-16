@@ -1,4 +1,6 @@
 def call() {
+    def values = terraformAwsEc2()
+  dir(values.ec2Module) {
  if (params.DELETE) {
   def terraformApprove = input message: 'Do you really want to destroy all resources?',
    parameters: [choice(name: 'Destroy', choices: 'yes\nno', description: 'Enter a value')]
@@ -6,6 +8,7 @@ def call() {
    sh "terraform destroy -auto-approve"
   } else {
    echo "Cancelled!"
+   }
   }
  }
 }

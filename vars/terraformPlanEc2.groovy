@@ -1,4 +1,6 @@
 def call() {
+    def values = terraformAwsEc2()
+  dir(values.ec2Module) {
  env.TF_VAR_environment = "${params.ENVIRONMENT}"
  env.TF_VAR_vpc_id = "${params.VPC}"
  env.TF_VAR_tag_description = "${params.TIPO}"
@@ -38,5 +40,6 @@ def call() {
   env.TF_VAR_tag_group = "${params.TAG_GROUP}"
   env.TF_VAR_alarm_name = "${params.NAME}-${params.TAG}-down-recovering"
   sh "terraform plan -target='module.ec2.aws_instance.generic_ec2' -target='module.ec2.aws_cloudwatch_metric_alarm.ec2_autorecover' -out=${params.NAME}-${params.TAG}.tfplan"
+  }
  }
 }
