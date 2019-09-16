@@ -1,4 +1,5 @@
 def call() {
+  def values = terraformAwsEc2()
   if (params.ENVIRONMENT == 'PROD') {
    stage('Init') {
     dir(values.ec2Module) {
