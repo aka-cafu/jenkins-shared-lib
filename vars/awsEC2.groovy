@@ -1,5 +1,5 @@
-def values = terraformAwsEc2()
-def call() {
+def call()
+def values = terraformAwsEc2() {
  pipeline {
   agent {
    docker '026804802036.dkr.ecr.sa-east-1.amazonaws.com/preventsenior/devops:0.1'
