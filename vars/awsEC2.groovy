@@ -6,6 +6,9 @@ def call() {
   stages {
    stage('Checkout') {
     steps {
+     script {
+      def values = terraformAwsEc2()
+     }
      checkout scm
     }
    }
