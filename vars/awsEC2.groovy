@@ -1,3 +1,4 @@
+def values = terraformAwsEc2()
 def call() {
  pipeline {
   agent {
@@ -6,9 +7,6 @@ def call() {
   stages {
    stage('Checkout') {
     steps {
-     script {
-      def values = terraformAwsEc2()
-     }
      checkout scm
     }
    }
