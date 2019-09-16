@@ -1,21 +1,27 @@
 def call() {
- node {
+ pipeline {
+   agent { docker '026804802036.dkr.ecr.sa-east-1.amazonaws.com/preventsenior/devops:0.1' }
+   stages {
   stage('Checkout') {
-   checkout scm
+     steps { checkout scm }
   }
   def values = terraformAwsEc2()
-  if (values.terraformVersion <= 0.10) {
+  if (values.terraformVersion <= 0.12) {
    stage('Version') {
+      steps {
      dir(values.ec2Module) {
       echo "Version unsupported!"
       sh values.versionUnsupported
+     }
      }
    }
   }
   if (params.ENVIRONMENT == 'PROD') {
    stage('Init') {
+      steps {
     dir(values.ec2Module) {
      sh "terraform init -backend-config='${values.s3Bucket}' -backend-config='key=application/${params.NAME}-${params.TAG}/terraform.tfstate' -backend-config='region=${values.awsRegion}' && sed -i 's/appname/${params.USERDATA}/g' main.tf"
+    }
     }
    }
   } else {
@@ -24,6 +30,7 @@ def call() {
    }
   }
   stage('Plan') {
+           steps {
    dir(values.ec2Module) {
     env.TF_VAR_environment = "${params.ENVIRONMENT}"
     env.TF_VAR_vpc_id = "${params.VPC}"
@@ -67,15 +74,21 @@ def call() {
     }
    }
   }
+  }
   stage('Destroy') {
+           steps {
    dir(values.ec2Module) {
       terraformDestroy()
    }
   }
+  }
   stage('Apply') {
+           steps {
    dir(values.ec2Module) {
       terraformApply()
    }
+           }
   }
  }
+}
 }
